@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campeonato Eliminatório 1x1 - Marvel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ff0000;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    .quiz-container {
+      text-align: center;
+    }
+
+    .round {
+      margin-top: 20px;
+      font-size: 1.5rem;
+    }
+
+    .images {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+    }
+
+    .image-option {
+      width: 200px;
+      height: 200px;
+      cursor: pointer;
+      border: 3px solid transparent;
+      border-radius: 10px;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+
+    .image-option:hover {
+      transform: scale(1.05);
+      border-color: #007bff;
+    }
+
+    .result {
+      font-size: 1.2rem;
+      font-weight: bold;
+      display: none;
+      margin-top: 20px;
+    }
+
+    .final-result {
+      font-size: 1.5rem;
+      color: yellow;
+      font-weight: bold;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Campeonato Eliminatório 1x1 - Marvel</h1>
+    <div id="round-number" class="round">Rodada: 1</div>
+    <div id="image-container" class="images">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Iron_Man_%28Marvel_Comics_character%29.png/300px-Iron_Man_%28Marvel_Comics_character%29.png" alt="Iron Man" class="image-option" data-choice="Iron Man">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Captain_America_2019.jpg" alt="Captain America" class="image-option" data-choice="Captain America">
+    </div>
+    <div class="result" id="result"></div>
+    <div class="final-result" id="final-result"></div>
+  </div>
+
+  <script>
+    const images = document.querySelectorAll('.image-option');
+    const resultDiv = document.getElementById('result');
+    const roundNumber = document.getElementById('round-number');
+    const finalResultDiv = document.getElementById('final-result');
+
+    const allChoices = [
+      "Iron Man", "Captain America", "Thor", "Hulk", "Black Panther", "Spider-Man", "Black Widow", "Doctor Strange",
+      "Ant-Man", "Scarlet Witch", "Vision", "Hawkeye", "Captain Marvel", "Loki", "Rocket Raccoon", "Gamora"
+    ];
+
+    let currentRound = 0;
+    let selectedOptions = [];
+    let availableChoices = [...allChoices];
+
+    function loadRound() {
+      if (availableChoices.length > 1) {
+        roundNumber.textContent = `Rodada: ${currentRound + 1}`;
+        
+        const choice1 = availableChoices[0];
+        const choice2 = availableChoices[1];
+
+        images[0].src = `https://via.placeholder.com/200?text=${choice1}`;
+        images[1].src = `https://via.placeholder.com/200?text=${choice2}`;
+        
+        images[0].setAttribute('data-choice', choice1);
+        images[1].setAttribute('data-choice', choice2);
+        
+        resultDiv.style.display = 'none';
+      } else {
+        roundNumber.textContent = "Final!";
+        finalResultDiv.textContent = `Vencedor: ${availableChoices[0]}`;
+        finalResultDiv.style.display = 'block';
+        images[0].style.display = 'none';
+        images[1].style.display = 'none';
+      }
+    }
+
+    images.forEach(image => {
+      image.addEventListener('click', (e) => {
+        const choice = e.target.getAttribute('data-choice');
+        selectedOptions.push(choice);
+
+        availableChoices = availableChoices.slice(2);
+        availableChoices.push(choice);
+
+        resultDiv.textContent = `Você escolheu: ${choice}!`;
+        resultDiv.style.display = 'block';
+        
+        currentRound++;
+        
+        setTimeout(() => {
+          loadRound();
+        }, 1500);
+      });
+    });
+
+    loadRound();
+  </script>
+</body>
+</html>
